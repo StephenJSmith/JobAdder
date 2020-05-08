@@ -4,5 +4,6 @@ namespace Core.Entities
     {
         int CandidateSkillId;
         string Name;
+        public int Weighting { get; set; }
     }
 }

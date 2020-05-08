@@ -4,5 +4,6 @@ namespace Core.Entities
     {
         public int JobId { get; set; }
         public string Name { get; set; }
+        public int Weighting { get; set; }
     }
 }

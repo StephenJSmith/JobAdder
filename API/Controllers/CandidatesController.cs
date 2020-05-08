@@ -13,7 +13,7 @@ namespace API.Controllers
       _candidateService = candidateService;
     }
 
-    [HttpGet("skillweightings")]
+    [HttpGet("weightings")]
     public ActionResult<IReadOnlyList<int>> GetSkillWeightings()
     {
         var weightings = _candidateService.GetStrengthWeightings();

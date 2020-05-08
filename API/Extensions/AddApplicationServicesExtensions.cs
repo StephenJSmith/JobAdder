@@ -8,6 +8,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) {
             services.AddScoped<ICandidateService, CandidateService>();
+            services.AddScoped<IJobService, JobService>();
 
             return services;
         }

@@ -8,5 +8,6 @@ namespace Core.Interfaces
     {
          IReadOnlyList<int> GetStrengthWeightings();
          Task<IReadOnlyList<CandidateSource>> GetSourceCandidates();
+         Task<IReadOnlyList<Candidate>> GetPopulatedEntities();
     }
 }

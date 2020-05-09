@@ -1,17 +1,19 @@
+using Newtonsoft.Json;
+
 namespace Core.Entities
 {
   public class JobSource
   {
-    // [JsonProperty("jobId")]
-    public long JobId { get; set; }
+    [JsonProperty("jobId")]
+    public int JobId { get; set; }
 
-    // [JsonProperty("name")]
+    [JsonProperty("name")]
     public string Name { get; set; }
 
-    // [JsonProperty("company")]
+    [JsonProperty("company")]
     public string Company { get; set; }
 
-    // [JsonProperty("skills")]
+    [JsonProperty("skills")]
     public string Skills { get; set; }
   }
 }

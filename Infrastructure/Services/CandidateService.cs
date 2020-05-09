@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Core.Entities;
+using Core.Helpers;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -51,6 +52,38 @@ namespace Infrastructure.Services
       var weightings = value.Split(',').Select(int.Parse).ToList();
 
       return weightings;
+    }
+
+    public async Task<IReadOnlyList<Candidate>> GetPopulatedEntities()
+    {
+      var weightings = GetStrengthWeightings();
+      var sourceItems = await GetSourceCandidates();
+      var candidateHelper = new CandidateHelper();
+
+      var candidates = new List<Candidate>();
+      foreach (var item in sourceItems)
+      {
+        var candidate = GetCandidateEntity(item, weightings, candidateHelper);
+      }
+
+      return candidates;
+    }
+
+    private Candidate GetCandidateEntity(
+      CandidateSource item,
+      IReadOnlyList<int> weightings,
+      CandidateHelper helper)
+    {
+      var candidate = new Candidate
+      {
+        CandidateId = item.CandidateId,
+        FirstName = item.Name.Split(' ').First(),
+        LastName = item.Name.Split(' ').Last(),
+        CandidateSkills = helper.GetCandidateSkills(
+          item.CandidateId, item.SkillTags, weightings)
+      };
+
+      return new Candidate();
     }
   }
 }

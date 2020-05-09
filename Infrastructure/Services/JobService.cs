@@ -68,6 +68,10 @@ namespace Infrastructure.Services
       return jobs;
     }
 
+    public async Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number) {
+      return null;
+    }
+
     private Job GetJobEntity(JobSource item, IReadOnlyList<int> weightings) {
       var job = new Job {
         JobId = item.JobId,

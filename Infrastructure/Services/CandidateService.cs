@@ -64,6 +64,7 @@ namespace Infrastructure.Services
       foreach (var item in sourceItems)
       {
         var candidate = GetCandidateEntity(item, weightings, candidateHelper);
+        candidates.Add(candidate);
       }
 
       return candidates;
@@ -79,11 +80,12 @@ namespace Infrastructure.Services
         CandidateId = item.CandidateId,
         FirstName = item.Name.Split(' ').First(),
         LastName = item.Name.Split(' ').Last(),
+        SkillTags = item.SkillTags,
         CandidateSkills = helper.GetCandidateSkills(
           item.CandidateId, item.SkillTags, weightings)
       };
 
-      return new Candidate();
+      return candidate;
     }
   }
 }

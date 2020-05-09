@@ -17,14 +17,19 @@ namespace API.Controllers
       _candidateService = candidateService;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<Candidate>>> GetCandidatesWithWeightedSkills() {
+      var candidates = await _candidateService.GetPopulatedEntities();
+
+      return Ok(candidates);
+    }
+
     [HttpGet("source")]
     public async Task<ActionResult<IReadOnlyList<CandidateSource>>> GetSourceCandidates() {
       var candidates = await _candidateService.GetSourceCandidates();
 
       return Ok(candidates);
     }
-
-    
 
     [HttpGet("weightings")]
     public ActionResult<IReadOnlyList<int>> GetSkillWeightings()

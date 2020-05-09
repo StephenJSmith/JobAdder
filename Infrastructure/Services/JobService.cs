@@ -75,7 +75,23 @@ namespace Infrastructure.Services
       return jobs;
     }
 
+    public async Task<Job> GetJobWithWeightedSkills(int jobId) {
+      var sourceJob = await GetSourceJob(jobId);
+      if (sourceJob == null) { return null; }
+
+      var jobWeightings = GetRelevanceWeightings();
+      var weightedJob = JobHelper.GetJobEntity(sourceJob, jobWeightings);
+
+      return weightedJob;
+    }    
+
     public async Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number) {
+      var sourceJob = await GetSourceJob(jobId);
+      if (sourceJob == null) { return null; }
+
+      var jobWeightings = GetRelevanceWeightings();
+      var weightedJob = JobHelper.GetJobEntity(sourceJob, jobWeightings);
+
       return null;
     }
   }

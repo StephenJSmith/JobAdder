@@ -13,6 +13,7 @@ namespace Core.Interfaces
     Task<JobSource> GetSourceJob(int jobId);
 
     Task<IReadOnlyList<Job>> GetJobsWithWeightedSkills();
+    Task<Job> GetJobWithWeightedSkills(int jobId);
 
     Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number);
   }

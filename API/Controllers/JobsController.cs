@@ -25,6 +25,14 @@ namespace API.Controllers
       return Ok(jobs);
     }
 
+    [HttpGet("{jobId}")]
+    public async Task<ActionResult<Job>> GetJobWithWeightedSkills(int jobId) {
+      var job = await _jobService.GetJobWithWeightedSkills(jobId);
+      if (job == null) { return NotFound(); }
+
+      return Ok(job);
+    }
+
     [HttpGet("source")]
     public async Task<ActionResult<IReadOnlyList<JobSource>>> GetSourceJobs() {
       var jobs = await _jobService.GetSourceJobs();
@@ -35,7 +43,6 @@ namespace API.Controllers
     [HttpGet("source/{jobId}")]
     public async Task<ActionResult<JobSource>> GetSourceJob(int jobId) {
       var job = await _jobService.GetSourceJob(jobId);
-
       if (job == null) { return NotFound(); }
 
       return Ok(job);

@@ -10,6 +10,140 @@ namespace Core.Test
   public class CandidateHelperTests
   {
     [TestClass]
+    public class GetFirstName {
+      [TestMethod]
+      public void ReturnFirstNameWhenNameIncludesTwoNames() {
+        // Arrange
+        var expected = "Thomasine";
+        var testName = "Thomasine To";
+
+        // Act
+        var actual = CandidateHelper.GetFirstName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnFirstNameWhenNameIncludesMoreThanTwoNames() {
+        // Arrange
+        var expected = "Thomasine";
+        var testName = "Thomasine From To";
+
+        // Act
+        var actual = CandidateHelper.GetFirstName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnEmptyStringWhenNameIsOneNameOnly() {
+        // Arrange
+        var expected = string.Empty;
+        var testName = "Chan";
+
+        // Act
+        var actual = CandidateHelper.GetFirstName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnEmptyStringWhenNameEmpty() {
+        // Arrange
+        var expected = string.Empty;
+        var testName = string.Empty;
+
+        // Act
+        var actual = CandidateHelper.GetFirstName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnsEmptyStringWhenNullName() {
+        // Arrange
+        var expected = string.Empty;
+
+        // Act
+        var actual = CandidateHelper.GetFirstName(null);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+    }
+
+    [TestClass]
+    public class GetLastName {
+      [TestMethod]
+      public void ReturnsLastNameWhenNameEqualsTwoNames() {
+        // Arrange
+        var expected = "Chan";
+        var testName = "Bravo Chan";
+
+        // Act
+        var actual = CandidateHelper.GetLastName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnsLastNameWhenNameHasMoreThanTwoNames() {
+        // Arrange
+        var expected = "Chan";
+        var testName = "Bravo Xi Chan";
+
+        // Act
+        var actual = CandidateHelper.GetLastName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnsLastNameWhenNameIsOnlyOneName() {
+        // Arrange
+        var expected = "Chan";
+        var testName = "Chan";
+
+        // Act
+        var actual = CandidateHelper.GetLastName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnsEmptyStringWhenNoName() {
+        // Arrange
+        var expected = string.Empty;
+        var testName = string.Empty;
+
+        // Act
+        var actual = CandidateHelper.GetLastName(testName);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+
+      [TestMethod]
+      public void ReturnsEmptyStringWhenNullName() {
+        // Arrange
+        var expected = string.Empty;
+
+        // Act
+        var actual = CandidateHelper.GetLastName(null);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+      }
+    }
+
+    [TestClass]
     public class GetCandidateSkills
     {
       [TestMethod]

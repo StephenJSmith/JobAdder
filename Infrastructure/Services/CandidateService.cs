@@ -77,8 +77,8 @@ namespace Infrastructure.Services
       {
         CandidateId = item.CandidateId,
         Name = item.Name,
-        FirstName = item.Name.Split(' ').First(),
-        LastName = item.Name.Split(' ').Last(),
+        FirstName = CandidateHelper.GetFirstName(item.Name),
+        LastName = CandidateHelper.GetLastName(item.Name),
         CandidateSkills = CandidateHelper.GetCandidateSkills(
           item.CandidateId, item.SkillTags, weightings)
       };

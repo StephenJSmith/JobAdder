@@ -6,6 +6,24 @@ namespace Core.Helpers
 {
   public class CandidateHelper
   {
+    public static string GetFirstName(string name = "") {
+      if (name == null) { return string.Empty; }
+      
+      var names = name.Split(' ');
+      if (names.Length < 2) { return string.Empty; }
+
+      return names.First();
+    }
+
+    public static string GetLastName(string name = "") {
+      if (name == null) { return string.Empty; }
+
+      var names = name.Split(' ');
+      if (names.Length == 0) { return string.Empty; }
+
+      return names.Last();
+    }
+
     public static IList<CandidateSkill> GetCandidateSkills(
         int candidateId,
         string skillTags,

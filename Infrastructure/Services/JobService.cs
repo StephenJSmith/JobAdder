@@ -44,6 +44,13 @@ namespace Infrastructure.Services
       }
     }
 
+    public async Task<JobSource> GetSourceJob(int jobId) {
+      var sourceJobs = await GetSourceJobs();
+      var sourceJob = sourceJobs.FirstOrDefault(j => j.JobId == jobId);
+
+      return sourceJob;
+    }
+
     public IReadOnlyList<int> GetRelevanceWeightings()
     {
       var key = "SkillsWeightings:JobRelevance";

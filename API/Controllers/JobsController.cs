@@ -32,6 +32,15 @@ namespace API.Controllers
       return Ok(jobs);
     }
 
+    [HttpGet("source/{jobId}")]
+    public async Task<ActionResult<JobSource>> GetSourceJob(int jobId) {
+      var job = await _jobService.GetSourceJob(jobId);
+
+      if (job == null) { return NotFound(); }
+
+      return Ok(job);
+    }
+
     [HttpGet("weightings")]
     public ActionResult<IReadOnlyList<int>> GetSkillWeightings()
     {

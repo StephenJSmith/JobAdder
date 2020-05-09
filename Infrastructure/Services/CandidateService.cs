@@ -66,7 +66,12 @@ namespace Infrastructure.Services
         candidates.Add(candidate);
       }
 
-      return candidates;
+      var orderedCandidates = candidates
+        .OrderBy(c => c.LastName)
+        .ThenBy(c => c.FirstName)
+        .ToList();
+
+      return orderedCandidates;
     }
   }
 }

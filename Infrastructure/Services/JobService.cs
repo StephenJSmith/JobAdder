@@ -72,7 +72,12 @@ namespace Infrastructure.Services
           jobs.Add(job);
       }
 
-      return jobs;
+      var orderedJobs = jobs
+        .OrderBy(j => j.Company)
+        .ThenBy(j => j.Name)
+        .ToList();
+
+      return orderedJobs;
     }
 
     public async Task<Job> GetJobWithWeightedSkills(int jobId) {
@@ -86,11 +91,8 @@ namespace Infrastructure.Services
     }    
 
     public async Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number) {
-      var sourceJob = await GetSourceJob(jobId);
-      if (sourceJob == null) { return null; }
-
-      var jobWeightings = GetRelevanceWeightings();
-      var weightedJob = JobHelper.GetJobEntity(sourceJob, jobWeightings);
+      var job = await GetJobWithWeightedSkills(jobId);
+      if (job == null) { return null; }
 
       return null;
     }

@@ -3,3 +3,5 @@ bin
 appsettings.json
 node_modules
 /.vs/BlackAdder/v16/Server/sqlite3
+.vs/BlackAdder/DesignTimeBuild/.dtbcache
+.vs/BlackAdder/v16/.suo

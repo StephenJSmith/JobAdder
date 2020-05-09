@@ -16,6 +16,7 @@ namespace API.Controllers
     }
 
     // TODO: Use of DTOs to return shaped data in responses rather than Entities
+    // TODO: AutoMapper to map between Entities and DTOs
 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Job>>> GetJobsWithWeightedSkills() {

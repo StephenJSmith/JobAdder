@@ -15,6 +15,15 @@ namespace API.Controllers
       _jobService = jobService;
     }
 
+    // TODO: Use of DTOs to return shaped data in responses rather than Entities
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<Job>>> GetJobsWithWeightedSkills() {
+      var jobs = await _jobService.GetJobsWithWeightedSkills();
+
+      return Ok(jobs);
+    }
+
     [HttpGet("source")]
     public async Task<ActionResult<IReadOnlyList<JobSource>>> GetSourceJobs() {
       var jobs = await _jobService.GetSourceJobs();

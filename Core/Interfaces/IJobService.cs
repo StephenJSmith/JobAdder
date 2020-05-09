@@ -9,5 +9,7 @@ namespace Core.Interfaces
     IReadOnlyList<int> GetRelevanceWeightings();
 
     Task<IReadOnlyList<JobSource>> GetSourceJobs();
+
+    Task<IReadOnlyList<Job>> GetJobsWithWeightedSkills();
   }
 }

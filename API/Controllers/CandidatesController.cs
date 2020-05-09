@@ -17,9 +17,11 @@ namespace API.Controllers
       _candidateService = candidateService;
     }
 
+    // TODO: Use of DTOs to return shaped data in responses rather than Entities
+
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Candidate>>> GetCandidatesWithWeightedSkills() {
-      var candidates = await _candidateService.GetPopulatedEntities();
+      var candidates = await _candidateService.GetCandidatesWithWeightedSkills();
 
       return Ok(candidates);
     }

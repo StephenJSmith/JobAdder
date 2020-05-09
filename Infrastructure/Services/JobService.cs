@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Core.Entities;
+using Core.Helpers;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -50,6 +51,36 @@ namespace Infrastructure.Services
       var weightings = value.Split(',').Select(int.Parse).ToList();
 
       return weightings;
+    }
+
+    public async Task<IReadOnlyList<Job>> GetJobsWithWeightedSkills()
+    {
+      var weightings = GetRelevanceWeightings();
+      var sourceItems = await GetSourceJobs();
+
+      var jobs = new List<Job>();
+      foreach (var item in sourceItems)
+      {
+          var job = GetJobEntity(item, weightings);
+          jobs.Add(job);
+      }
+
+      return jobs;
+    }
+
+    private Job GetJobEntity(JobSource item, IReadOnlyList<int> weightings) {
+      var job = new Job {
+        JobId = item.JobId,
+        Name = item.Name,
+        Company = item.Company,
+        Skills = item.Skills,
+        JobSkills = JobHelper.GetJobSkills(
+          item.JobId, item.Skills, weightings)
+      };
+
+      job.Skills = JobHelper.GetJobSkillsCsv(job.JobSkills);
+
+      return job;
     }
   }
 }

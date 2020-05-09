@@ -54,16 +54,15 @@ namespace Infrastructure.Services
       return weightings;
     }
 
-    public async Task<IReadOnlyList<Candidate>> GetPopulatedEntities()
+    public async Task<IReadOnlyList<Candidate>> GetCandidatesWithWeightedSkills()
     {
       var weightings = GetStrengthWeightings();
       var sourceItems = await GetSourceCandidates();
-      var candidateHelper = new CandidateHelper();
 
       var candidates = new List<Candidate>();
       foreach (var item in sourceItems)
       {
-        var candidate = GetCandidateEntity(item, weightings, candidateHelper);
+        var candidate = GetCandidateEntity(item, weightings);
         candidates.Add(candidate);
       }
 
@@ -72,18 +71,19 @@ namespace Infrastructure.Services
 
     private Candidate GetCandidateEntity(
       CandidateSource item,
-      IReadOnlyList<int> weightings,
-      CandidateHelper helper)
+      IReadOnlyList<int> weightings)
     {
       var candidate = new Candidate
       {
         CandidateId = item.CandidateId,
+        Name = item.Name,
         FirstName = item.Name.Split(' ').First(),
         LastName = item.Name.Split(' ').Last(),
-        SkillTags = item.SkillTags,
-        CandidateSkills = helper.GetCandidateSkills(
+        CandidateSkills = CandidateHelper.GetCandidateSkills(
           item.CandidateId, item.SkillTags, weightings)
       };
+
+      candidate.SkillTags = CandidateHelper.GetCandidatesSkillsCsv(candidate.CandidateSkills);
 
       return candidate;
     }

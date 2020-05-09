@@ -6,7 +6,7 @@ namespace Core.Helpers
 {
   public class CandidateHelper
   {
-    public IList<CandidateSkill> GetCandidateSkills(
+    public static IList<CandidateSkill> GetCandidateSkills(
         int candidateId,
         string skillTags,
         IReadOnlyList<int> weightings)
@@ -37,6 +37,13 @@ namespace Core.Helpers
       }
 
       return candidateSkills;
+    }
+
+    public static string GetCandidatesSkillsCsv(IList<CandidateSkill> skills) {
+      var toArray = skills.Select(s => s.Name).ToArray();
+      var csv = string.Join(", ", toArray);
+
+      return csv;
     }
   }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Security.Policy;
 using API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +21,16 @@ namespace API
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllers();
+      services.AddControllers()
+        .AddNewtonsoftJson(options => {
+          options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        });
+
+      var baseApiUrl = Configuration["BaseApiUrl"];
+      services.AddHttpClient("API Client", client => {
+        client.BaseAddress = new Uri(baseApiUrl);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+      });
 
       services.AddApplicationServices();
     }

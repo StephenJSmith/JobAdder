@@ -6,6 +6,25 @@ namespace Core.Helpers
 {
   public class CandidateHelper
   {
+    public static Candidate GetCandidateEntity(
+      CandidateSource item,
+      IReadOnlyList<int> weightings)
+    {
+      var candidate = new Candidate
+      {
+        CandidateId = item.CandidateId,
+        Name = item.Name,
+        FirstName = CandidateHelper.GetFirstName(item.Name),
+        LastName = CandidateHelper.GetLastName(item.Name),
+        CandidateSkills = CandidateHelper.GetCandidateSkills(
+          item.CandidateId, item.SkillTags, weightings)
+      };
+
+      candidate.SkillTags = CandidateHelper.GetCandidatesSkillsCsv(candidate.CandidateSkills);
+
+      return candidate;
+    }
+
     public static string GetFirstName(string name = "") {
       if (name == null) { return string.Empty; }
       

@@ -6,6 +6,21 @@ namespace Core.Helpers
 {
   public class JobHelper
   {
+  public static Job GetJobEntity(JobSource item, IReadOnlyList<int> weightings) {
+      var job = new Job {
+        JobId = item.JobId,
+        Name = item.Name,
+        Company = item.Company,
+        Skills = item.Skills,
+        JobSkills = JobHelper.GetJobSkills(
+          item.JobId, item.Skills, weightings)
+      };
+
+      job.Skills = JobHelper.GetJobSkillsCsv(job.JobSkills);
+
+      return job;
+    }
+
     public static IList<JobSkill> GetJobSkills(
         int jobId,
         string skills,

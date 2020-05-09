@@ -62,30 +62,11 @@ namespace Infrastructure.Services
       var candidates = new List<Candidate>();
       foreach (var item in sourceItems)
       {
-        var candidate = GetCandidateEntity(item, weightings);
+        var candidate = CandidateHelper.GetCandidateEntity(item, weightings);
         candidates.Add(candidate);
       }
 
       return candidates;
-    }
-
-    private Candidate GetCandidateEntity(
-      CandidateSource item,
-      IReadOnlyList<int> weightings)
-    {
-      var candidate = new Candidate
-      {
-        CandidateId = item.CandidateId,
-        Name = item.Name,
-        FirstName = CandidateHelper.GetFirstName(item.Name),
-        LastName = CandidateHelper.GetLastName(item.Name),
-        CandidateSkills = CandidateHelper.GetCandidateSkills(
-          item.CandidateId, item.SkillTags, weightings)
-      };
-
-      candidate.SkillTags = CandidateHelper.GetCandidatesSkillsCsv(candidate.CandidateSkills);
-
-      return candidate;
     }
   }
 }

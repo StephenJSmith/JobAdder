@@ -61,7 +61,7 @@ namespace Infrastructure.Services
       var jobs = new List<Job>();
       foreach (var item in sourceItems)
       {
-          var job = GetJobEntity(item, weightings);
+          var job = JobHelper.GetJobEntity(item, weightings);
           jobs.Add(job);
       }
 
@@ -70,21 +70,6 @@ namespace Infrastructure.Services
 
     public async Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number) {
       return null;
-    }
-
-    private Job GetJobEntity(JobSource item, IReadOnlyList<int> weightings) {
-      var job = new Job {
-        JobId = item.JobId,
-        Name = item.Name,
-        Company = item.Company,
-        Skills = item.Skills,
-        JobSkills = JobHelper.GetJobSkills(
-          item.JobId, item.Skills, weightings)
-      };
-
-      job.Skills = JobHelper.GetJobSkillsCsv(job.JobSkills);
-
-      return job;
     }
   }
 }

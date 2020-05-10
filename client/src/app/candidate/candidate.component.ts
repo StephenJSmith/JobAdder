@@ -9,6 +9,7 @@ import { ICandidate } from '../shared/models/candidate';
 })
 export class CandidateComponent implements OnInit {
   candidates: ICandidate[];
+  title: string;
 
   constructor(
     private candidateService: CandidateService,
@@ -22,9 +23,17 @@ export class CandidateComponent implements OnInit {
     this.candidateService.getCandidates()
       .subscribe((candidates: ICandidate[]) => {
         this.candidates = candidates;
-        console.log(this.candidates);
+        this.setTitle();
       }, error => {
         console.log(error);
       });
+  }
+
+  private setTitle() {
+    if (this.candidates.length === 0) {
+      this.title = 'There are NO current Candidates';
+    } else {
+      this.title = `Full list of Candidates (${this.candidates.length}) - Last Name order`;
+    }
   }
 }

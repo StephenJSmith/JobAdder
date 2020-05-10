@@ -1,5 +1,4 @@
 using System;
-using System.Security.Policy;
 using API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ namespace API
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddControllers()
@@ -42,9 +40,16 @@ namespace API
             Version = "v1"
           });
       });
+
+      services.AddCors(opt => {
+        opt.AddPolicy("CorsPolicy", policy => {
+          policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://localhost:4200");
+        });
+      });
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment())
@@ -52,10 +57,11 @@ namespace API
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseHttpsRedirection();
+      // TODO: Uncomment Https Redirection when able to make HTTPS requests
+      // app.UseHttpsRedirection();
 
       app.UseRouting();
-
+      app.UseCors("CorsPolicy");
       app.UseAuthorization();
 
       app.UseSwagger();

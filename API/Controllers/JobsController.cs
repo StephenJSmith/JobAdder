@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -26,6 +27,8 @@ namespace API.Controllers
     }
 
     [HttpGet("{jobId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Job>> GetJobWithWeightedSkills(int jobId) {
       var job = await _jobService.GetJobWithWeightedSkills(jobId);
       if (job == null) { return NotFound(); }
@@ -48,6 +51,8 @@ namespace API.Controllers
     }
 
     [HttpGet("source/{jobId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<JobSource>> GetSourceJob(int jobId) {
       var job = await _jobService.GetSourceJob(jobId);
       if (job == null) { return NotFound(); }

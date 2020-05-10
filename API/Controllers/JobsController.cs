@@ -33,6 +33,13 @@ namespace API.Controllers
       return Ok(job);
     }
 
+    [HttpGet("{jobId}/candidates/{number}")]
+    public async Task<ActionResult<IReadOnlyList<MatchedJobCandidate>>> GetBestMatchedCandidatesForJob(int jobId, int number) {
+      var matchedCandidates = await _jobService.GetBestMatchedCandidatesForJob(jobId, number);
+
+      return Ok(matchedCandidates);
+    }
+
     [HttpGet("source")]
     public async Task<ActionResult<IReadOnlyList<JobSource>>> GetSourceJobs() {
       var jobs = await _jobService.GetSourceJobs();

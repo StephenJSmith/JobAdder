@@ -14,13 +14,18 @@ namespace Infrastructure.Services
   public class JobService : IJobService
   {
     private readonly IConfiguration _config;
+    private readonly ICandidateService _candidateService;
 
-    public JobService(IConfiguration config)
+    public JobService(
+      IConfiguration config,
+      ICandidateService candidateService)
     {
       _config = config;
+      _candidateService = candidateService;
     }
 
-    public async Task<IReadOnlyList<JobSource>> GetSourceJobs() {
+    public async Task<IReadOnlyList<JobSource>> GetSourceJobs()
+    {
       var baseApiUrl = _config["BaseApiurl"];
       var baseAddress = new Uri(baseApiUrl);
 
@@ -44,7 +49,8 @@ namespace Infrastructure.Services
       }
     }
 
-    public async Task<JobSource> GetSourceJob(int jobId) {
+    public async Task<JobSource> GetSourceJob(int jobId)
+    {
       var sourceJobs = await GetSourceJobs();
       var sourceJob = sourceJobs.FirstOrDefault(j => j.JobId == jobId);
 
@@ -68,8 +74,8 @@ namespace Infrastructure.Services
       var jobs = new List<Job>();
       foreach (var item in sourceItems)
       {
-          var job = JobHelper.GetJobEntity(item, weightings);
-          jobs.Add(job);
+        var job = JobHelper.GetJobEntity(item, weightings);
+        jobs.Add(job);
       }
 
       var orderedJobs = jobs
@@ -80,7 +86,8 @@ namespace Infrastructure.Services
       return orderedJobs;
     }
 
-    public async Task<Job> GetJobWithWeightedSkills(int jobId) {
+    public async Task<Job> GetJobWithWeightedSkills(int jobId)
+    {
       var sourceJob = await GetSourceJob(jobId);
       if (sourceJob == null) { return null; }
 
@@ -88,13 +95,42 @@ namespace Infrastructure.Services
       var weightedJob = JobHelper.GetJobEntity(sourceJob, jobWeightings);
 
       return weightedJob;
-    }    
+    }
 
-    public async Task<IReadOnlyList<Job>> GetBestMatchedCandidatesForJob(int jobId, int number) {
+    public async Task<IReadOnlyList<MatchedJobCandidate>> GetBestMatchedCandidatesForJob(int jobId, int number)
+    {
       var job = await GetJobWithWeightedSkills(jobId);
       if (job == null) { return null; }
 
-      return null;
+      var candidates = await _candidateService.GetCandidatesWithWeightedSkills();
+
+      var matches = new List<MatchedJobCandidate>();
+      foreach (var candidate in candidates)
+      {
+          var matchedSkills = JobHelper.GetJobCandidateMatchedSkills(job.JobSkills, candidate.CandidateSkills);
+          if (!matchedSkills.Any()) { continue; }
+
+          var matchedJobCandidate  = new MatchedJobCandidate {
+            JobId = job.JobId,
+            CandidateId = candidate.CandidateId,
+            FirstName = candidate.FirstName,
+            LastName = candidate.LastName,
+            MatchedSkills = matchedSkills,
+            SkillsCount = matchedSkills.Count,
+            WeightingsSum = matchedSkills
+              .Sum(ms => ms.JobWeighting * ms.CandidateWeighting)
+          };
+
+        matches.Add(matchedJobCandidate);
+      }
+
+      var orderedMatches = matches
+        .OrderByDescending(m => m.WeightingsSum)
+        .OrderByDescending(m => m.SkillsCount)
+        .Take(number)
+        .ToList();
+
+      return orderedMatches;
     }
   }
 }

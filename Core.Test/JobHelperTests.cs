@@ -176,5 +176,94 @@ namespace Core.Test
         Assert.AreEqual(expected, actual);
       }
     }
+
+    [TestClass]
+    public class GetJobCandidateMatchedSkills {
+      [TestMethod]
+      public void NoMatchesReturnsEmptyList() {
+        // Arrange
+        var jobId = 13;
+        var jobSkills = new List<JobSkill>{
+          new JobSkill{JobId = jobId, Name = "architecture", Weighting = 10},
+          new JobSkill{JobId = jobId, Name = "communication", Weighting = 8},
+          new JobSkill{JobId = jobId, Name = "detail", Weighting = 5}
+        };
+
+        var candidateId = 113;
+        var candidateSkills = new List<CandidateSkill>{
+          new CandidateSkill{CandidateId = candidateId, Name = "plumbing", Weighting = 8},
+          new CandidateSkill{CandidateId = candidateId, Name = "carpentry", Weighting = 5},
+          new CandidateSkill{CandidateId = candidateId, Name = "bricklaying", Weighting = 3}
+        };
+
+        // Act
+        var actual = JobHelper.GetJobCandidateMatchedSkills(jobSkills, candidateSkills);
+
+        // Assert
+        Assert.IsFalse(actual.Any());
+      }
+
+      [TestMethod]
+      public void SingleNameMatchInReturnedList() {
+        // Arrange
+        var matchingSkill = "detail";
+        var jobId = 13;
+        var jobSkills = new List<JobSkill>{
+          new JobSkill{JobId = jobId, Name = "architecture", Weighting = 10},
+          new JobSkill{JobId = jobId, Name = "communication", Weighting = 8},
+          new JobSkill{JobId = jobId, Name = matchingSkill, Weighting = 5}
+        };
+
+        var candidateId = 113;
+        var candidateSkills = new List<CandidateSkill>{
+          new CandidateSkill{CandidateId = candidateId, Name = "plumbing", Weighting = 8},
+          new CandidateSkill{CandidateId = candidateId, Name = matchingSkill, Weighting = 5},
+          new CandidateSkill{CandidateId = candidateId, Name = "bricklaying", Weighting = 3}
+        };
+
+        // Act
+        var actual = JobHelper.GetJobCandidateMatchedSkills(jobSkills, candidateSkills);
+
+        // Assert
+        Assert.AreEqual(1, actual.Count);
+        Assert.AreEqual(matchingSkill, actual.First().Name);
+        Assert.AreEqual(5, actual.First().JobWeighting);
+        Assert.AreEqual(5, actual.First().CandidateWeighting);
+      }
+
+      [TestMethod]
+      public void MultipleNameMatchesInReturnedList() {
+        // Arrange
+        var matchingSkill1 = "communication";
+        var matchingSkill2 = "detail";
+        var jobId = 13;
+        var jobSkills = new List<JobSkill>{
+          new JobSkill{JobId = jobId, Name = "architecture", Weighting = 10},
+          new JobSkill{JobId = jobId, Name = matchingSkill1, Weighting = 8},
+          new JobSkill{JobId = jobId, Name = matchingSkill2, Weighting = 5}
+        };
+
+        var candidateId = 113;
+        var candidateSkills = new List<CandidateSkill>{
+          new CandidateSkill{CandidateId = candidateId, Name = "plumbing", Weighting = 8},
+          new CandidateSkill{CandidateId = candidateId, Name = matchingSkill2, Weighting = 5},
+          new CandidateSkill{CandidateId = candidateId, Name = "bricklaying", Weighting = 3,},
+          new CandidateSkill{CandidateId = candidateId, Name = matchingSkill1, Weighting = 1,}
+        };
+
+        // Act
+        var actual = JobHelper.GetJobCandidateMatchedSkills(jobSkills, candidateSkills);
+
+        // Assert
+        Assert.AreEqual(2, actual.Count);
+        var skill1 = actual.First(s => s.Name == matchingSkill1);
+        Assert.AreEqual(8, skill1.JobWeighting);
+        Assert.AreEqual(1, skill1.CandidateWeighting);
+
+        var skill2 = actual.First(s => s.Name == matchingSkill2);
+        Assert.AreEqual(5, skill2.JobWeighting);
+        Assert.AreEqual(5, skill2.CandidateWeighting);
+      }
+    }
   }
 }

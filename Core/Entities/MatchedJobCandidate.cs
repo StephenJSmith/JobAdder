@@ -10,6 +10,6 @@ namespace Core.Entities
         public string LastName { get; set; }
         public int WeightingsSum { get; set; }
         public int SkillsCount { get; set; }
-        public IReadOnlyList<MatchedSkill> MatchedSkills { get; set; }
+        public IList<MatchedSkill> MatchedSkills { get; set; }
     }
 }

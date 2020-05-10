@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Entities;
@@ -60,6 +61,26 @@ namespace Core.Helpers
       var csv = string.Join(", ", toArray);
 
       return csv;
+    }
+
+    public static IList<MatchedSkill> GetJobCandidateMatchedSkills(IList<JobSkill> jobSkills, IList<CandidateSkill> candidateSkills)
+    {
+      var matchedSkills = new List<MatchedSkill>();
+      foreach (var jobSkill in jobSkills)
+      {
+          var candidateSkill = candidateSkills.FirstOrDefault(cs => cs.Name == jobSkill.Name);
+          if (candidateSkill == null) { continue; }
+
+          matchedSkills.Add(new MatchedSkill{
+            JobId = jobSkill.JobId,
+            CandidateId = candidateSkill.CandidateId,
+            Name = jobSkill.Name,
+            JobWeighting = jobSkill.Weighting,
+            CandidateWeighting = candidateSkill.Weighting
+          });
+      }
+
+      return matchedSkills;
     }
   }
 }

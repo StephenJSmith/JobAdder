@@ -77,7 +77,7 @@ namespace Core.Helpers
     }
 
     public static string GetCandidatesSkillsCsv(IList<CandidateSkill> skills) {
-      var toArray = skills.Select(s => s.Name).ToArray();
+      var toArray = skills.Select(s => $"{s.Name} ({s.Weighting.ToString()})").ToArray();
       var csv = string.Join(", ", toArray);
 
       return csv;

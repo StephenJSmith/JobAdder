@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Entities;
@@ -7,7 +6,10 @@ namespace Core.Helpers
 {
   public class JobHelper
   {
-  public static Job GetJobEntity(JobSource item, IReadOnlyList<int> weightings) {
+  public static Job GetJobEntity(
+    JobSource item,
+    IReadOnlyList<int> weightings)
+  {
       var job = new Job {
         JobId = item.JobId,
         Name = item.Name,
@@ -57,7 +59,7 @@ namespace Core.Helpers
 
     public static string GetJobSkillsCsv(IList<JobSkill> skills)
     {
-      var toArray = skills.Select(s => s.Name).ToArray();
+      var toArray = skills.Select(s => $"{s.Name} ({s.Weighting.ToString()})").ToArray();
       var csv = string.Join(", ", toArray);
 
       return csv;

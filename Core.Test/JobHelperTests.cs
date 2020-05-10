@@ -149,7 +149,7 @@ namespace Core.Test
       public void ReturnsExpectedCsvOfSkillsNames()
       {
         // Arrange
-        var expected = "reliable, data-entry, consultation";
+        var expected = "reliable (5), data-entry (4), consultation (3)";
         var testId = 42;
         var testSkills = new List<JobSkill> {
                     new JobSkill {

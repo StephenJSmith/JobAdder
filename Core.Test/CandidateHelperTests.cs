@@ -268,7 +268,7 @@ namespace Core.Test
       public void ReturnsCsvOfSkillsNames()
       {
         // Arrange
-        var expected = "illustrator, oration, kotlin";
+        var expected = "illustrator (5), oration (4), kotlin (3)";
         var testId = 23;
         var testSkills = new List<CandidateSkill> {
                     new CandidateSkill {

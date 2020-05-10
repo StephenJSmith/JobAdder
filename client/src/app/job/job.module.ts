@@ -4,11 +4,12 @@ import { JobComponent } from './job.component';
 import { SharedModule } from '../shared/shared.module';
 import { JobRoutingModule } from './job-routing.module';
 import { JobsListComponent } from './jobs-list/jobs-list.component';
+import { BestMatchesComponent } from './best-matches/best-matches.component';
 
 
 
 @NgModule({
-  declarations: [JobComponent, JobsListComponent],
+  declarations: [JobComponent, JobsListComponent, BestMatchesComponent],
   imports: [
     CommonModule,
     SharedModule,

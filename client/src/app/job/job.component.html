@@ -3,4 +3,10 @@
     [jobs]="jobs"
     (selectJob)="onSelectedJob($event)"
   ></app-jobs-list>
+
+  <app-best-matches *ngIf="canShowBestMatches"
+    [selectedJob]="selectedJob"
+    [bestMatches]="matchedJobCandidates"
+    (toFullJobsList)="onToFullJobsList()"
+  ></app-best-matches>
 </div>

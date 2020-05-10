@@ -26,8 +26,13 @@ export class JobsListComponent implements OnInit {
     }
   }
 
-  onTopCandidates(jobId: number, topNumber: number) {
-    const selectedJob: ISelectedJob = {jobId, topNumber};
+  onTopCandidates(job: IJob, topNumber: number) {
+    const selectedJob: ISelectedJob = {
+      jobId: job.jobId,
+      company: job.company,
+      name: job.name,
+      topNumber
+    };
     this.selectJob.emit(selectedJob);
   }
 }

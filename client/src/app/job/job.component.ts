@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IJob } from '../shared/models/job';
 import { JobService } from './job.service';
-import { Router } from '@angular/router';
 import { ISelectedJob } from '../shared/models/selected-job';
+import { IMatchedJobCandidate } from '../shared/models/matched-job-candidate';
 
 @Component({
   selector: 'app-job',
@@ -11,11 +11,13 @@ import { ISelectedJob } from '../shared/models/selected-job';
 })
 export class JobComponent implements OnInit {
   jobs: IJob[];
+  matchedJobCandidates: IMatchedJobCandidate[];
+  selectedJob: ISelectedJob;
   canShowJobs = false;
+  canShowBestMatches = false;
 
   constructor(
     private jobService: JobService,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +25,13 @@ export class JobComponent implements OnInit {
   }
 
   onSelectedJob(selectedJob: ISelectedJob) {
-    console.log(selectedJob);
+    this.selectedJob = selectedJob;
+    this.getMatchedJobCandidates(selectedJob);
+  }
+
+  onToFullJobsList() {
+    this.canShowBestMatches = false;
+    this.canShowJobs = true;
   }
 
   private getJobs() {
@@ -31,8 +39,18 @@ export class JobComponent implements OnInit {
       .subscribe((jobs: IJob[]) => {
         this.jobs = jobs;
         this.canShowJobs = true;
+        this.canShowBestMatches = false;
       }, error => {
         console.log(error);
+      });
+  }
+
+  private getMatchedJobCandidates(selectedJob: ISelectedJob) {
+    this.jobService.getMatchedJobCandidates(selectedJob)
+      .subscribe((matchedCandidates: IMatchedJobCandidate[]) => {
+        this.matchedJobCandidates = matchedCandidates;
+        this.canShowBestMatches = true;
+        this.canShowJobs = false;
       });
   }
 }

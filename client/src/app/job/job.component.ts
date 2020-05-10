@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IJob } from '../shared/models/job';
 import { JobService } from './job.service';
 import { Router } from '@angular/router';
+import { ISelectedJob } from '../shared/models/selected-job';
 
 @Component({
   selector: 'app-job',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class JobComponent implements OnInit {
   jobs: IJob[];
-  title: string;
+  canShowJobs = false;
 
   constructor(
     private jobService: JobService,
@@ -21,25 +22,17 @@ export class JobComponent implements OnInit {
     this.getJobs();
   }
 
+  onSelectedJob(selectedJob: ISelectedJob) {
+    console.log(selectedJob);
+  }
+
   private getJobs() {
     this.jobService.getJobs()
       .subscribe((jobs: IJob[]) => {
         this.jobs = jobs;
-        this.setTitle();
+        this.canShowJobs = true;
       }, error => {
         console.log(error);
       });
-  }
-
-  private setTitle() {
-    if (this.jobs.length === 0) {
-      this.title = 'There are NO current Jobs';
-    } else {
-      this.title = `Full list of Jobs (${this.jobs.length}) - Company order`;
-    }
-  }
-
-  onTopCandidates(jobId: number, topNumber: number) {
-    console.log(`Job: ${jobId} - Top ${topNumber}`);
   }
 }

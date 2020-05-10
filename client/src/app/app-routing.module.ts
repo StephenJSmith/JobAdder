@@ -7,8 +7,15 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'candidates',
-    loadChildren: () => import('./candidate/candidate.module').then(mod => mod.CandidateModule)
+    loadChildren: () => import('./candidate/candidate.module')
+      .then(mod => mod.CandidateModule)
   },
+  {
+    path: 'jobs',
+    loadChildren: () => import('./job/job.module')
+      .then(mod => mod.JobModule)
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

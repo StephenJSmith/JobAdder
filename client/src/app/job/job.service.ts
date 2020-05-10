@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ICandidate } from '../shared/models/candidate';
+import { IJob } from '../shared/models/job';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CandidateService {
+export class JobService {
   baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  getCandidates() {
-    const url = `${this.baseUrl}candidates`;
+  getJobs() {
+    const url = `${this.baseUrl}jobs`;
 
-    return this.http.get<ICandidate[]>(url);
+    return this.http.get<IJob[]>(url);
   }
 }

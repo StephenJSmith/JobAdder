@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IJob } from '../shared/models/job';
 import { JobService } from './job.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job',
@@ -9,9 +10,11 @@ import { JobService } from './job.service';
 })
 export class JobComponent implements OnInit {
   jobs: IJob[];
+  title: string;
 
   constructor(
     private jobService: JobService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -22,9 +25,21 @@ export class JobComponent implements OnInit {
     this.jobService.getJobs()
       .subscribe((jobs: IJob[]) => {
         this.jobs = jobs;
-        console.log(this.jobs);
+        this.setTitle();
       }, error => {
         console.log(error);
       });
+  }
+
+  private setTitle() {
+    if (this.jobs.length === 0) {
+      this.title = 'There are NO current Jobs';
+    } else {
+      this.title = `Full list of Jobs (${this.jobs.length}) - Company order`;
+    }
+  }
+
+  onTopCandidates(jobId: number, topNumber: number) {
+    console.log(`Job: ${jobId} - Top ${topNumber}`);
   }
 }

@@ -126,7 +126,7 @@ namespace Infrastructure.Services
 
       var orderedMatches = matches
         .OrderByDescending(m => m.WeightingsSum)
-        .OrderByDescending(m => m.SkillsCount)
+        .ThenByDescending(m => m.SkillsCount)
         .Take(number)
         .ToList();
 

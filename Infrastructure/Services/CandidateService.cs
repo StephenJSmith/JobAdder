@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Helpers;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -56,6 +57,13 @@ namespace Infrastructure.Services
 
     public async Task<IReadOnlyList<Candidate>> GetCandidatesWithWeightedSkills()
     {
+      var orderedCandidates = await RetrieveAllCandidatesWithWeightedSkills();
+
+      return orderedCandidates;
+    }
+
+    private async Task<IReadOnlyList<Candidate>> RetrieveAllCandidatesWithWeightedSkills()
+    {
       var weightings = GetStrengthWeightings();
       var sourceItems = await GetSourceCandidates();
 
@@ -72,6 +80,20 @@ namespace Infrastructure.Services
         .ToList();
 
       return orderedCandidates;
+    }
+
+    public async Task<Pagination<Candidate>> GetPagedCandidatesWithWeightedSkills(PageSpecParams pageParams)
+    {
+      var allCandidates = await RetrieveAllCandidatesWithWeightedSkills();
+      var count = allCandidates.Count;
+      var pagedCandidates = allCandidates
+        .Skip(pageParams.Skip)
+        .Take(pageParams.Take)
+        .ToList();
+      var pagination = new Pagination<Candidate>(
+        pageParams.PageNumber, pageParams.PageSize, count, pagedCandidates);
+
+      return pagination;
     }
   }
 }

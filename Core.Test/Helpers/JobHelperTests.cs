@@ -4,7 +4,7 @@ using Core.Entities;
 using Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Core.Test
+namespace Core.Test.Helpers
 {
   [TestClass]
   public class JobHelperTests

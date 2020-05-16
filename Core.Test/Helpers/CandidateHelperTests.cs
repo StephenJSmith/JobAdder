@@ -4,7 +4,7 @@ using System.Linq;
 using Core.Helpers;
 using Core.Entities;
 
-namespace Core.Test
+namespace Core.Test.Helpers
 {
   [TestClass]
   public class CandidateHelperTests

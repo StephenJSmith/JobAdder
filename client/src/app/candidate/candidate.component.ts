@@ -38,6 +38,8 @@ export class CandidateComponent implements OnInit {
       this.candidates = response.body.items;
       this.totalCount = response.body.count;
       this.canShowCandidates = true;
+    }, error => {
+      console.log(error);
     });
   }
 }

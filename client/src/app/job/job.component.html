@@ -1,7 +1,11 @@
 <div class="container mt-5">
   <app-jobs-list *ngIf="canShowJobs"
     [jobs]="jobs"
+    [totalCount]="totalCount"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
     (selectJob)="onSelectedJob($event)"
+    (pageChanged)="onPageChanged($event)"
   ></app-jobs-list>
 
   <app-best-matches *ngIf="canShowBestMatches"

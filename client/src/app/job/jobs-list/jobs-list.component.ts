@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { IJob } from 'src/app/shared/models/job';
 import { ISelectedJob } from 'src/app/shared/models/selected-job';
 
@@ -7,22 +7,30 @@ import { ISelectedJob } from 'src/app/shared/models/selected-job';
   templateUrl: './jobs-list.component.html',
   styleUrls: ['./jobs-list.component.scss']
 })
-export class JobsListComponent implements OnInit {
+export class JobsListComponent implements OnChanges {
   @Input() jobs: IJob[];
+  @Input() totalCount: number;
+  @Input() pageNumber: number;
+  @Input() pageSize: number;
+  @Output() pageChanged = new EventEmitter<number>();
   @Output() selectJob = new EventEmitter<ISelectedJob>();
   title: string;
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.setTitle();
+  }
+
+  onPageChanged(event: any) {
+    this.pageChanged.emit(event.page);
   }
 
   private setTitle() {
     if (!this.jobs || this.jobs.length === 0) {
       this.title = 'There are NO Open Jobs';
     } else {
-      this.title = `Full list of Open Jobs (${this.jobs.length}) - Company order`;
+      this.title = `Page ${this.pageNumber} of Open Jobs (${this.totalCount}) - Company order`;
     }
   }
 

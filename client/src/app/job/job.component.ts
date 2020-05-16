@@ -3,6 +3,7 @@ import { IJob } from '../shared/models/job';
 import { JobService } from './job.service';
 import { ISelectedJob } from '../shared/models/selected-job';
 import { IMatchedJobCandidate } from '../shared/models/matched-job-candidate';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-job',
@@ -15,13 +16,16 @@ export class JobComponent implements OnInit {
   selectedJob: ISelectedJob;
   canShowJobs = false;
   canShowBestMatches = false;
+  pageSize = environment.defaultPageSize;
+  pageNumber = 1;
+  totalCount = 0;
 
   constructor(
     private jobService: JobService,
   ) { }
 
   ngOnInit(): void {
-    this.getJobs();
+    this.getPagedJobs();
   }
 
   onSelectedJob(selectedJob: ISelectedJob) {
@@ -34,15 +38,24 @@ export class JobComponent implements OnInit {
     this.canShowJobs = true;
   }
 
-  private getJobs() {
-    this.jobService.getJobs()
-      .subscribe((jobs: IJob[]) => {
-        this.jobs = jobs;
-        this.canShowJobs = true;
-        this.canShowBestMatches = false;
-      }, error => {
-        console.log(error);
-      });
+  onPageChanged(pageNumber: number) {
+    if (pageNumber === this.pageSize) { return; }
+
+    this.pageNumber = pageNumber;
+    this.getPagedJobs();
+  }
+
+  private getPagedJobs() {
+    this.jobService.getPagedJobs(
+      this.pageNumber, this.pageSize
+    ).subscribe((response) => {
+      this.jobs = response.body.items;
+      this.totalCount = response.body.count;
+      this.canShowJobs = true;
+      this.canShowBestMatches = false;
+    }, error => {
+      console.log(error);
+    });
   }
 
   private getMatchedJobCandidates(selectedJob: ISelectedJob) {

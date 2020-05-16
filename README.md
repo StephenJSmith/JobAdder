@@ -67,19 +67,19 @@ The application was developed entirely in Visual Studio Code. Visual Studio 2019
 
 The setup instructions are for opening the folder containing the solution in VS Code and running the following commands from the inbuilt CLI.
 
-**\&gt;dotnet test** (to run all the MSTest unit tests)
+**$ dotnet test** (to run all the MSTest unit tests)
 
 To run the server
 
-**\&gt;cd API**
+**$ cd API**
 
-**API\&gt;dotnet run**
+**API$ dotnet run**
 
 To run the Angular client, in another Terminal window
 
-**\&gt;cd client**
+**$ cd client**
 
-**client\&gt;ng serve -o**
+**client$ ng serve -o**
 
 This should open the application home page in a browser tab when compiled.
 

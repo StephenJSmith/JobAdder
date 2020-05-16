@@ -62,6 +62,20 @@ namespace Infrastructure.Services
       return orderedCandidates;
     }
 
+    public async Task<Pagination<Candidate>> GetPagedCandidatesWithWeightedSkills(PageSpecParams pageParams)
+    {
+      var allCandidates = await RetrieveAllCandidatesWithWeightedSkills();
+      var count = allCandidates.Count;
+      var pagedCandidates = allCandidates
+        .Skip(pageParams.Skip)
+        .Take(pageParams.Take)
+        .ToList();
+      var pagination = new Pagination<Candidate>(
+        pageParams.PageNumber, pageParams.PageSize, count, pagedCandidates);
+
+      return pagination;
+    }
+
     private async Task<IReadOnlyList<Candidate>> RetrieveAllCandidatesWithWeightedSkills()
     {
       var weightings = GetStrengthWeightings();
@@ -80,20 +94,6 @@ namespace Infrastructure.Services
         .ToList();
 
       return orderedCandidates;
-    }
-
-    public async Task<Pagination<Candidate>> GetPagedCandidatesWithWeightedSkills(PageSpecParams pageParams)
-    {
-      var allCandidates = await RetrieveAllCandidatesWithWeightedSkills();
-      var count = allCandidates.Count;
-      var pagedCandidates = allCandidates
-        .Skip(pageParams.Skip)
-        .Take(pageParams.Take)
-        .ToList();
-      var pagination = new Pagination<Candidate>(
-        pageParams.PageNumber, pageParams.PageSize, count, pagedCandidates);
-
-      return pagination;
     }
   }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Helpers;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -68,6 +69,27 @@ namespace Infrastructure.Services
 
     public async Task<IReadOnlyList<Job>> GetJobsWithWeightedSkills()
     {
+      List<Job> orderedJobs = await RetrieveAllJobsWithWeightedSkills();
+
+      return orderedJobs;
+    }
+
+    public async Task<Pagination<Job>> GetPagedJobsWithWeightedSkills(PageSpecParams pageParams)
+    {
+      var allJobs = await RetrieveAllJobsWithWeightedSkills();
+      var count = allJobs.Count;
+      var pagedJobs = allJobs
+        .Skip(pageParams.Skip)
+        .Take(pageParams.Take)
+        .ToList();
+      var pagination = new Pagination<Job>(
+        pageParams.PageNumber, pageParams.PageSize, count, pagedJobs);
+
+      return pagination;
+    }
+
+    private async Task<List<Job>> RetrieveAllJobsWithWeightedSkills()
+    {
       var weightings = GetRelevanceWeightings();
       var sourceItems = await GetSourceJobs();
 
@@ -82,9 +104,9 @@ namespace Infrastructure.Services
         .OrderBy(j => j.Company)
         .ThenBy(j => j.Name)
         .ToList();
-
       return orderedJobs;
     }
+
 
     public async Task<Job> GetJobWithWeightedSkills(int jobId)
     {
@@ -107,19 +129,20 @@ namespace Infrastructure.Services
       var matches = new List<MatchedJobCandidate>();
       foreach (var candidate in candidates)
       {
-          var matchedSkills = JobHelper.GetJobCandidateMatchedSkills(job.JobSkills, candidate.CandidateSkills);
-          if (!matchedSkills.Any()) { continue; }
+        var matchedSkills = JobHelper.GetJobCandidateMatchedSkills(job.JobSkills, candidate.CandidateSkills);
+        if (!matchedSkills.Any()) { continue; }
 
-          var matchedJobCandidate  = new MatchedJobCandidate {
-            JobId = job.JobId,
-            CandidateId = candidate.CandidateId,
-            FirstName = candidate.FirstName,
-            LastName = candidate.LastName,
-            MatchedSkills = matchedSkills,
-            SkillsCount = matchedSkills.Count,
-            WeightingsSum = matchedSkills
-              .Sum(ms => ms.JobWeighting * ms.CandidateWeighting)
-          };
+        var matchedJobCandidate = new MatchedJobCandidate
+        {
+          JobId = job.JobId,
+          CandidateId = candidate.CandidateId,
+          FirstName = candidate.FirstName,
+          LastName = candidate.LastName,
+          MatchedSkills = matchedSkills,
+          SkillsCount = matchedSkills.Count,
+          WeightingsSum = matchedSkills
+            .Sum(ms => ms.JobWeighting * ms.CandidateWeighting)
+        };
 
         matches.Add(matchedJobCandidate);
       }

@@ -12,7 +12,6 @@ namespace API.Controllers
   public class CandidatesController : BaseApiController
   {
     private readonly ICandidateService _candidateService;
-    private readonly IConfiguration _config;
 
     public CandidatesController(
       ICandidateService candidateService,
@@ -41,21 +40,6 @@ namespace API.Controllers
       var paginated = await _candidateService.GetPagedCandidatesWithWeightedSkills(pageParams);
 
       return Ok(paginated);
-    }
-
-    private void SetConfiguredPageDefaults(PageSpecParams pageParams)
-    {
-      if (!int.TryParse(_config["Pagination:MaxPageSize"], out int maxPageSize))
-      {
-        maxPageSize = 50;
-      }
-
-      if (!int.TryParse(_config["Pagination:DefaultPageSize"], out int defaultPageSize))
-      {
-        defaultPageSize = 10;
-      }
-
-      pageParams.ApplyConfigurationDefaults(maxPageSize, defaultPageSize);
     }
 
     [HttpGet("source")]

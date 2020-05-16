@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CandidateService } from './candidate.service';
 import { ICandidate } from '../shared/models/candidate';
+import { environment } from 'src/environments/environment';
+import { IPagination } from '../shared/models/pagination';
 
 @Component({
   selector: 'app-candidate',
@@ -10,22 +12,32 @@ import { ICandidate } from '../shared/models/candidate';
 export class CandidateComponent implements OnInit {
   candidates: ICandidate[];
   canShowCandidates = false;
+  pageSize = environment.defaultPageSize;
+  pageNumber = 1;
+  totalCount = 0;
 
   constructor(
     private candidateService: CandidateService,
   ) { }
 
   ngOnInit(): void {
-    this.getCandidates();
+    this.getPagedCandidates();
   }
 
-  private getCandidates() {
-    this.candidateService.getCandidates()
-      .subscribe((candidates: ICandidate[]) => {
-        this.candidates = candidates;
-        this.canShowCandidates = true;
-      }, error => {
-        console.log(error);
-      });
+  onPageChanged(pageNumber: number) {
+    if (pageNumber === this.pageSize) { return; }
+
+    this.pageNumber = pageNumber;
+    this.getPagedCandidates();
+  }
+
+  private getPagedCandidates() {
+    this.candidateService.getPagedCandidates(
+      this.pageNumber, this.pageSize
+    ).subscribe((response) => {
+      this.candidates = response.body.items;
+      this.totalCount = response.body.count;
+      this.canShowCandidates = true;
+    });
   }
 }

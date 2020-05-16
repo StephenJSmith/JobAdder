@@ -1,5 +1,9 @@
 <div class="container mt-5">
   <app-candidates-list *ngIf="canShowCandidates"
     [candidates]="candidates"
+    [totalCount]="totalCount"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)"
   ></app-candidates-list>
 </div>

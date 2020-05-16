@@ -5,8 +5,6 @@ import { SharedModule } from '../shared/shared.module';
 import { CandidateRoutingModule } from './candidate-routing.module';
 import { CandidatesListComponent } from './candidates-list/candidates-list.component';
 
-
-
 @NgModule({
   declarations: [CandidateComponent, CandidatesListComponent],
   imports: [
